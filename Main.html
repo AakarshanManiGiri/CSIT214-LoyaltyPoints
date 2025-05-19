@@ -5,113 +5,203 @@
     <title>WeFly Loyalty Points</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f8fb;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
             margin: 0;
             padding: 0;
         }
         header {
             background: #0074d9;
             color: #fff;
-            padding: 1rem;
+            padding: 2rem 1rem 1rem 1rem;
             text-align: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
         }
         main {
-            max-width: 600px;
-            margin: 2rem auto;
+            max-width: 400px;
+            margin: 3rem auto;
             background: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 2.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
         }
         h2 {
             color: #0074d9;
+            margin-top: 0;
         }
         form {
             margin-bottom: 2rem;
         }
         label {
             display: block;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
+            font-weight: 500;
         }
         input, select, button {
             margin-top: 0.5rem;
-            padding: 0.5rem;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        th, td {
-            border: 1px solid #ddd;
             padding: 0.75rem;
-            text-align: left;
+            width: 100%;
+            border: 1px solid #cfd8dc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
         }
-        th {
-            background: #eaf3fb;
+        button {
+            background: #0074d9;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: background 0.2s;
         }
-        tr:nth-child(even) {
-            background: #f9fbfd;
+        button:hover {
+            background: #005fa3;
+        }
+        .hidden {
+            display: none;
+        }
+        .welcome {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .points {
+            font-size: 1.2rem;
+            color: #0074d9;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .error {
+            color: #d90429;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .logout-btn {
+            background: #e0eafc;
+            color: #0074d9;
+            border: 1px solid #0074d9;
+            margin-top: 0.5rem;
+        }
+        .logout-btn:hover {
+            background: #cfdef3;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>WeFly Loyalty Points</h1>
+        <p>Track and redeem your rewards with ease</p>
     </header>
     <main>
-        <h2>Add Points</h2>
-        <form>
-            <label for="memberId">Member ID</label>
-            <input type="text" id="memberId" name="memberId" required>
-            <label for="points">Points</label>
-            <input type="number" id="points" name="points" required>
-            <button type="submit">Add Points</button>
+        <!-- Login Form -->
+        <form id="loginForm">
+            <h2>Login</h2>
+            <label for="loginUser">Username</label>
+            <input type="text" id="loginUser" required>
+            <label for="loginPass">Password</label>
+            <input type="password" id="loginPass" required>
+            <button type="submit">Login</button>
+            <div class="error" id="loginError"></div>
         </form>
 
-        <h2>Redeem Rewards</h2>
-        <form>
-            <label for="redeemMemberId">Member ID</label>
-            <input type="text" id="redeemMemberId" name="redeemMemberId" required>
-            <label for="reward">Reward</label>
-            <select id="reward" name="reward">
-                <option value="flight_upgrade">Flight Upgrade (5000 pts)</option>
-                <option value="lounge_access">Lounge Access (2000 pts)</option>
-                <option value="gift_card">Gift Card (1000 pts)</option>
-            </select>
-            <button type="submit">Redeem</button>
-        </form>
+        <!-- User Dashboard -->
+        <div id="dashboard" class="hidden">
+            <div class="welcome">
+                Welcome, <span id="userName"></span>!
+            </div>
+            <div class="points">
+                Your Points: <span id="userPoints"></span>
+            </div>
 
-        <h2>Member Points</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Member ID</th>
-                    <th>Name</th>
-                    <th>Points</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1001</td>
-                    <td>Jane Doe</td>
-                    <td>7500</td>
-                </tr>
-                <tr>
-                    <td>1002</td>
-                    <td>John Smith</td>
-                    <td>3200</td>
-                </tr>
-                <tr>
-                    <td>1003</td>
-                    <td>Alice Lee</td>
-                    <td>12000</td>
-                </tr>
-            </tbody>
-        </table>
+            <h2>Redeem Rewards</h2>
+            <form id="redeemForm">
+                <label for="reward">Reward</label>
+                <select id="reward" name="reward">
+                    <option value="flight_upgrade">Flight Upgrade (5000 pts)</option>
+                    <option value="lounge_access">Lounge Access (2000 pts)</option>
+                    <option value="gift_card">Gift Card (1000 pts)</option>
+                </select>
+                <button type="submit">Redeem</button>
+                <div class="error" id="redeemError"></div>
+                <div class="error" id="redeemSuccess" style="color: #2ecc40;"></div>
+            </form>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
     </main>
+    <script>
+        // "Database" of users
+        const users = [
+            { username: "jane", password: "doe123", name: "Jane Doe", points: 7500 },
+            { username: "john", password: "smith456", name: "John Smith", points: 3200 },
+            { username: "alice", password: "lee789", name: "Alice Lee", points: 12000 }
+        ];
+
+        let currentUser = null;
+
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+        const dashboard = document.getElementById('dashboard');
+        const userName = document.getElementById('userName');
+        const userPoints = document.getElementById('userPoints');
+        const redeemForm = document.getElementById('redeemForm');
+        const redeemError = document.getElementById('redeemError');
+        const redeemSuccess = document.getElementById('redeemSuccess');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            loginError.textContent = '';
+            const username = document.getElementById('loginUser').value.trim();
+            const password = document.getElementById('loginPass').value;
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                currentUser = user;
+                showDashboard();
+            } else {
+                loginError.textContent = 'Invalid username or password.';
+            }
+        });
+
+        function showDashboard() {
+            loginForm.classList.add('hidden');
+            dashboard.classList.remove('hidden');
+            userName.textContent = currentUser.name;
+            userPoints.textContent = currentUser.points;
+            redeemError.textContent = '';
+            redeemSuccess.textContent = '';
+        }
+
+        redeemForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            redeemError.textContent = '';
+            redeemSuccess.textContent = '';
+            const reward = document.getElementById('reward').value;
+            let cost = 0;
+            let rewardName = '';
+            if (reward === 'flight_upgrade') {
+                cost = 5000; rewardName = 'Flight Upgrade';
+            } else if (reward === 'lounge_access') {
+                cost = 2000; rewardName = 'Lounge Access';
+            } else if (reward === 'gift_card') {
+                cost = 1000; rewardName = 'Gift Card';
+            }
+            if (currentUser.points >= cost) {
+                currentUser.points -= cost;
+                userPoints.textContent = currentUser.points;
+                redeemSuccess.textContent = `Successfully redeemed ${rewardName}!`;
+            } else {
+                redeemError.textContent = 'Not enough points for this reward.';
+            }
+        });
+
+        logoutBtn.addEventListener('click', function() {
+            currentUser = null;
+            loginForm.reset();
+            loginForm.classList.remove('hidden');
+            dashboard.classList.add('hidden');
+        });
+    </script>
 </body>
 </html>
